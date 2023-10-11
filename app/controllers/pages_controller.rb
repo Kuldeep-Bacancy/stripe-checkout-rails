@@ -8,10 +8,23 @@ class PagesController < ApplicationController
 
   def create_session
     session = Stripe::Checkout::Session.create({
+        customer_email: 'customer@example.com',
+        payment_intent_data: {setup_future_usage: 'off_session'},
         line_items: [{
-          # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-          price: 'price_1NzbpKSJBtqJoKyOQ9j4hfRu',
+          price_data: {
+            currency: 'inr',
+            product_data: {name: 'T-shirt'},
+            unit_amount: 500000,
+          },
           quantity: 1,
+        },
+        {
+          price_data: {
+            currency: 'inr',
+            product_data: {name: 'Jeans'},
+            unit_amount: 500000,
+          },
+          quantity: 2,
         }],
         mode: 'payment',
         success_url: 'http://localhost:3000/success',
